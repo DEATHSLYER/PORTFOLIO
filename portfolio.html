@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umesh A - Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            overflow-x: hidden;
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        #matrix-canvas {
+            z-index: 10;
+        }
+        .hero-content {
+            z-index: 20;
+        }
+        .timeline-container {
+            position: relative;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background-color: #3b82f6;
+            z-index: -1;
+        }
+        .blue-box {
+            background-color: #1e3a8a;
+        }
+        .timeline-content {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: inherit;
+        }
+        .timeline-item-hidden {
+            opacity: 0;
+            transition: all 1s ease-out;
+        }
+        .timeline-item-from-left {
+            transform: translateX(-100%);
+        }
+        .timeline-item-from-right {
+            transform: translateX(100%);
+        }
+        .timeline-item-from-top {
+            transform: translateY(-50px);
+        }
+        .timeline-item-from-bottom {
+            transform: translateY(50px);
+        }
+        .timeline-item-visible {
+            transform: translate(0, 0);
+            opacity: 1;
+        }
+        .bee-indicator {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            z-index: 50;
+            top: 0;
+            transition: top 0.2s ease-out;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            animation: flying 2s infinite alternate;
+        }
+        @keyframes flying {
+            from {
+                transform: translateX(-50%) translateY(0) rotate(5deg);
+            }
+            to {
+                transform: translateX(-50%) translateY(-10px) rotate(-5deg);
+            }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div id="hero-section" class="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
+        <canvas id="matrix-canvas" class="absolute inset-0 z-10"></canvas>
+        <div class="relative z-20 p-6 md:p-12 bg-gray-900 bg-opacity-70 backdrop-blur-sm rounded-3xl shadow-2xl hero-content">
+            <h1 class="text-6xl md:text-8xl font-extrabold leading-tight text-white animate-fade-in">
+                Hi, I'm <span class="text-gradient">Umesh A</span>.
+            </h1>
+            <p class="text-xl md:text-2xl mt-4 font-medium text-gray-300">
+                Electronics & Instrumentation Engineering Student | AI & Automation Enthusiast
+            </p>
+            <div class="flex flex-wrap justify-center gap-6 mt-8">
+                <a href="#journey" class="px-6 py-3 rounded-full bg-blue-600 text-white font-bold transition-transform transform hover:scale-105 hover:bg-blue-700">
+                    My Journey
+                </a>
+                <a href="#contact" class="px-6 py-3 rounded-full border-2 border-blue-600 text-blue-400 font-bold transition-transform transform hover:scale-105 hover:bg-blue-600 hover:text-white">
+                    Get in Touch
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <section id="about" class="py-20 max-w-4xl mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-6 text-blue-400">About Me</h2>
+        <p class="text-lg md:text-xl leading-relaxed text-gray-400 text-center">
+            Highly motivated and results-driven Electronics and Instrumentation Engineering student with a strong foundation in problem-solving and a passion for learning new technologies. Experienced in developing AI-powered solutions and automation systems. Proficient in C, Python, and Java, with hands-on project experience in conversational AI, embedded systems, and full-stack development. Seeking to leverage technical skills and a creative mindset to contribute to a forward-thinking organization.
+        </p>
+    </section>
+
+    <section id="journey" class="py-20 max-w-6xl mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-16 text-blue-400">My Journey</h2>
+        <div class="timeline-container relative flex flex-col items-center md:grid md:grid-cols-2 md:gap-x-12">
+            <div class="timeline-line hidden md:block"></div>
+            <div id="bee-indicator" class="bee-indicator hidden md:flex">🐝</div>
+            
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-left md:col-start-1 md:text-right">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="6.2.jpg" alt="A snapshot from a project workshop" class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-right">A snapshot from a project workshop.</p>
+            </div>
+
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-right md:col-start-2 md:text-left">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="5.1.jpg" alt="Performing electrical work on a project." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-left">Performing electrical work on a project.</p>
+            </div>
+
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-left md:col-start-1 md:text-right">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="5.5.jpg" alt="Completed wiring for a control system." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-right">Completed wiring for a control system.</p>
+            </div>
+            
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-right md:col-start-2 md:text-left">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="6.3.jpg" alt="Earning a Google AI Skills badge." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-left">Earning a Google AI Skills badge.</p>
+            </div>
+
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-left md:col-start-1 md:text-right">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <video controls autoplay loop muted playsinline class="timeline-content">
+                        <source src="7.1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p class="mt-4 text-gray-400 md:text-right">A video demonstration of a project.</p>
+            </div>
+
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-right md:col-start-2 md:text-left">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="7.4.jpg" alt="A 3D model of a robotic arm made in Blender." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-left">A 3D model of a robotic arm made in Blender.</p>
+            </div>
+
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-left md:col-start-1 md:text-right">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="6.6.jpg" alt="Another 3D Blender project." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-right">Another 3D Blender project.</p>
+            </div>
+            
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-right md:col-start-2 md:text-left">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <video controls autoplay loop muted playsinline class="timeline-content">
+                        <source src="6.9.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p class="mt-4 text-gray-400 md:text-left">A video of a creative automation project.</p>
+            </div>
+
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-left md:col-start-1 md:text-right">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="7.jpg" alt="A warehouse environment rendered in Blender." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-right">A warehouse environment rendered in Blender.</p>
+            </div>
+            
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-right md:col-start-2 md:text-left">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <video controls autoplay loop muted playsinline class="timeline-content">
+                        <source src="1.1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p class="mt-4 text-gray-400 md:text-left">A video showcasing a complex system.</p>
+            </div>
+
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-left md:col-start-1 md:text-right">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="6.jpg" alt="Working on a Smart India Hackathon project." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-right">Working on a Smart India Hackathon project.</p>
+            </div>
+            
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-right md:col-start-2 md:text-left">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="6.7.jpg" alt="A close-up of a project's hardware components." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-left">A close-up of a project's hardware components.</p>
+            </div>
+
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-left md:col-start-1 md:text-right">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="6.4.jpg" alt="Another view of the project's hardware." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-right">Another view of the project's hardware.</p>
+            </div>
+            
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-right md:col-start-2 md:text-left">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="6.5.jpg" alt="A photo taken during an event with team members." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-left">A photo taken during an event with team members.</p>
+            </div>
+
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-left md:col-start-1 md:text-right">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="1.jpg" alt="An NCC group photo from a camp or event." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-right">An NCC group photo from a camp or event.</p>
+            </div>
+
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-right md:col-start-2 md:text-left">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="2.2.jpg" alt="Receiving an award at a competition." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-left">Receiving an award at a competition.</p>
+            </div>
+
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-left md:col-start-1 md:text-right">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="2.jpg" alt="A speaker at the WAVES event." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-right">A speaker at the WAVES event.</p>
+            </div>
+            
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-right md:col-start-2 md:text-left">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="7.3.jpg" alt="Another speaker at the WAVES event." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-left">Another speaker at the WAVES event.</p>
+            </div>
+
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-left md:col-start-1 md:text-right">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="4.jpg" alt="A team selfie taken during a competition." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-right">A team selfie taken during a competition.</p>
+            </div>
+            
+            <div class="my-12 w-full timeline-item timeline-item-hidden timeline-item-from-right md:col-start-2 md:text-left">
+                <div class="w-full h-64 blue-box rounded-lg shadow-xl flex items-center justify-center text-gray-200">
+                    <img src="6.1.jpg" alt="A group photo of the team at the WAVES event." class="timeline-content">
+                </div>
+                <p class="mt-4 text-gray-400 md:text-left">A group photo of the team at the WAVES event.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-20 max-w-6xl mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-16 text-blue-400">My Projects</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+            <div class="bg-gray-800 p-6 rounded-2xl shadow-xl">
+                <h3 class="text-2xl font-bold text-blue-300 mb-2">Async AI Chatbot</h3>
+                <p class="text-sm italic text-gray-400 mb-4">(RASA, Django, asyncio, LLMs)</p>
+                <p class="text-gray-300 mb-4">Engineered a highly scalable chatbot by integrating Rasa, Django, and asyncio to deliver fast, intelligent, and interactive responses. Leveraged Large Language Models (LLMs) to enhance conversational capabilities and provide a more natural user experience.</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-2xl shadow-xl">
+                <h3 class="text-2xl font-bold text-blue-300 mb-2">GoReader - AI Interactive Reader</h3>
+                <p class="text-sm italic text-gray-400 mb-4">(React, Node.js, AI/ML)</p>
+                <p class="text-gray-300 mb-4">Currently developing an AI-driven interactive reading application that provides dynamic narration and an immersive storytelling experience. Implemented a dual-mode UI with adjustable narration controls, focusing on speech synthesis and story analysis.</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-2xl shadow-xl">
+                <h3 class="text-2xl font-bold text-blue-300 mb-2">Chatbot Ticketing System</h3>
+                <p class="text-sm italic text-gray-400 mb-4">(RASA)</p>
+                <p class="text-gray-300 mb-4">Collaborated in a 5-member team to develop a Rasa-based chatbot for automating ticket booking, cancellations, and customer queries. Contributed to model training, significantly improving the bot's Natural Language Understanding (NLU) for faster and more efficient ticketing processes.</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-2xl shadow-xl">
+                <h3 class="text-2xl font-bold text-blue-300 mb-2">Emotion Detection</h3>
+                <p class="text-sm italic text-gray-400 mb-4">(Embedded C)</p>
+                <p class="text-gray-300 mb-4">Developed a real-time emotion detection system for wearable devices using Embedded C. Utilized sensors to measure skin conductivity and detect emotions like stress or excitement, demonstrating practical application of embedded systems.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="py-20 max-w-4xl mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-10 text-blue-400">Skills & Education</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-gray-800 p-6 rounded-2xl shadow-xl">
+                <h3 class="text-2xl font-bold text-blue-300 mb-4">Technical Skills</h3>
+                <ul class="space-y-2 text-gray-300">
+                    <li class="flex items-center"><i class="fas fa-microchip mr-3 text-blue-400"></i> <strong>Frameworks/Tools:</strong> RASA, React.js, Blender, Node.js, Embedded C</li>
+                    <li class="flex items-center"><i class="fas fa-code mr-3 text-blue-400"></i> <strong>Languages:</strong> C, Python, Java, LLMs, HTML, CSS, JS</li>
+                    <li class="flex items-center"><i class="fas fa-lightbulb mr-3 text-blue-400"></i> <strong>Interests:</strong> Conversational AI, Automation Systems, Graphics Designing</li>
+                </ul>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-2xl shadow-xl">
+                <h3 class="text-2xl font-bold text-blue-300 mb-4">Education</h3>
+                <div class="mb-4">
+                    <h4 class="text-lg font-semibold text-gray-200">Bannari Amman Institute of Technology</h4>
+                    <p class="text-gray-400">B.E. in Electronics and Instrumentation Engineering</p>
+                    <p class="text-gray-400">CGPA: 8.53 (2022 – 2026)</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-200">Mahatma Baba Matriculation HSS</h4>
+                    <p class="text-gray-400">SSLC: 91.4%, HSC: 92.5%</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 max-w-4xl mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-10 text-blue-400">Get in Touch</h2>
+        <div class="flex flex-wrap justify-center gap-6 md:gap-10 text-3xl">
+            <a href="https://www.linkedin.com/in/umesh-ak/" target="_blank" class="text-gray-400 hover:text-blue-400 transition-colors">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="https://github.com/DEATHSLYER" target="_blank" class="text-gray-400 hover:text-blue-400 transition-colors">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="mailto:umesh.ei22@bitsathy.ac.in" class="text-gray-400 hover:text-blue-400 transition-colors">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <a href="tel:8667064991" class="text-gray-400 hover:text-blue-400 transition-colors">
+                <i class="fas fa-phone"></i>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        window.onload = function() {
+            const canvas = document.getElementById('matrix-canvas');
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            const characters = 'அஆஇஈஉஊஎஏஐஒஓஔகஙசஞடணதநபமயரலவழளறனஶஷஸஹஜக்ஷஅஅஉஊஏஐஒஓஔかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワオン1234567890';
+
+            const fontSize = 16;
+            const columns = Math.floor(width / fontSize);
+            const drops = [];
+
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(13, 17, 23, 0.05)';
+                ctx.fillRect(0, 0, width, height);
+                ctx.fillStyle = '#3b82f6';
+                ctx.font = `${fontSize}px monospace`;
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = characters[Math.floor(Math.random() * characters.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            setInterval(drawMatrix, 50);
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                drops.length = Math.floor(width / fontSize);
+                for (let i = 0; i < drops.length; i++) {
+                    drops[i] = 1;
+                }
+            });
+
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            const beeIndicator = document.getElementById('bee-indicator');
+            const timeline = document.querySelector('.timeline-container');
+            const transitionClasses = [
+                'timeline-item-from-left',
+                'timeline-item-from-right',
+                'timeline-item-from-top',
+                'timeline-item-from-bottom'
+            ];
+
+            timelineItems.forEach(item => {
+                const randomClass = transitionClasses[Math.floor(Math.random() * transitionClasses.length)];
+                item.classList.add(randomClass);
+            });
+
+            function checkVisibility() {
+                const timelineRect = timeline.getBoundingClientRect();
+                const start = timelineRect.top + window.scrollY;
+                const end = timelineRect.bottom + window.scrollY;
+
+                if (window.scrollY >= start && window.scrollY <= end - beeIndicator.offsetHeight) {
+                    const scrollProgress = (window.scrollY - start) / (end - start - beeIndicator.offsetHeight);
+                    beeIndicator.style.top = `${scrollProgress * 100}%`;
+                }
+
+                timelineItems.forEach(item => {
+                    const itemPosition = item.getBoundingClientRect().top;
+                    const screenHeight = window.innerHeight;
+
+                    if (itemPosition < screenHeight * 0.85) {
+                        item.classList.add('timeline-item-visible');
+                    } else {
+                        item.classList.remove('timeline-item-visible');
+                    }
+                });
+            }
+
+            checkVisibility();
+            window.addEventListener('scroll', checkVisibility);
+        };
+    </script>
+</body>
+</html>
