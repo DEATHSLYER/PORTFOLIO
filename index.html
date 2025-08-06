@@ -491,5 +491,286 @@
             window.addEventListener('scroll', checkVisibility);
         };
     </script>
+     <canvas id="matrixCanvas"></canvas>
+    
+    <script>
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let w, h;
+        const yourName = 'UMESH A';
+        const matrixChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()_+=-';
+        const fontSize = 16;
+        let columns;
+        let rows;
+
+        let drops = [];
+        let nameCharacters = {};
+        let staticParticles = [];
+        let particlesForFade = [];
+        
+        const rainDuration = 10000;
+        const fadeDuration = 2000;
+        const pauseDuration = 1000;
+        const expansionDuration = 10000;
+        const rippleBackDuration = 5000;
+        const nameExpansionStartTime = 5000;
+        const nameExpansionDuration = expansionDuration - nameExpansionStartTime;
+        const finalPauseDuration = 5000;
+
+        let animationState = 'rain';
+        let stateStartTime = null;
+
+        let nameCenterX, nameCenterY;
+
+        function setupCanvas() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+            columns = Math.floor(w / fontSize);
+            rows = Math.floor(h / fontSize);
+
+            drops = [];
+            for (let x = 0; x < columns; x++) {
+                drops[x] = 1;
+            }
+            
+            nameCharacters = {};
+            const nameWidth = ctx.measureText(yourName).width;
+            const startCol = Math.floor((w / 2 - nameWidth / 2) / fontSize);
+            const nameRow = Math.floor(h / 2 / fontSize);
+
+            for (let i = 0; i < yourName.length; i++) {
+                const x = startCol + i;
+                const y = nameRow;
+                if (x < columns && y < rows) {
+                    nameCharacters[`${x},${y}`] = yourName[i];
+                }
+            }
+        }
+        
+        window.addEventListener('resize', setupCanvas);
+        setupCanvas();
+
+        function draw(timestamp) {
+            if (!stateStartTime) stateStartTime = timestamp;
+            const elapsedTime = timestamp - stateStartTime;
+            
+            if (animationState === 'rain') {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, w, h);
+                ctx.font = `${fontSize}px monospace`;
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const xPos = i * fontSize;
+                    const yPos = drops[i] * fontSize;
+                    const col = i;
+                    const row = drops[i];
+
+                    const nameChar = nameCharacters[`${col},${row}`];
+                    if (nameChar) {
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.fillText(nameChar, xPos, yPos);
+                    } else {
+                        const char = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+                        ctx.fillStyle = '#00BFFF';
+                        ctx.fillText(char, xPos, yPos);
+                    }
+                    
+                    if (yPos > h && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    } else {
+                        drops[i]++;
+                    }
+                }
+                
+                if (elapsedTime > rainDuration) {
+                    animationState = 'fadeToBlack';
+                    stateStartTime = timestamp;
+                    
+                    particlesForFade = [];
+                    for(let r = 0; r < rows; r++){
+                        for(let c = 0; c < columns; c++){
+                            const nameChar = nameCharacters[`${c},${r}`];
+                            const char = nameChar || matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+                            const color = nameChar ? '#FFFFFF' : '#00BFFF';
+                            particlesForFade.push({
+                                x: c * fontSize,
+                                y: r * fontSize,
+                                char: char,
+                                color: color,
+                                isNameChar: !!nameChar
+                            });
+                        }
+                    }
+                }
+            } else if (animationState === 'fadeToBlack') {
+                const progress = Math.min(elapsedTime / fadeDuration, 1);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, w, h);
+                ctx.font = `${fontSize}px monospace`;
+
+                particlesForFade.forEach(p => {
+                    let color;
+                    if (p.isNameChar) {
+                        const whiteShade = 255 - Math.floor(progress * 255);
+                        color = `rgb(${whiteShade}, ${whiteShade}, ${whiteShade})`;
+                    } else {
+                        const blueShade = 191 - Math.floor(progress * 191);
+                        color = `rgb(0, 0, ${blueShade})`;
+                    }
+                    ctx.fillStyle = color;
+                    ctx.fillText(p.char, p.x, p.y);
+                });
+
+                if (progress >= 1) {
+                    animationState = 'pauseAfterFade';
+                    stateStartTime = timestamp;
+                }
+            } else if (animationState === 'pauseAfterFade') {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, w, h);
+
+                if (elapsedTime > pauseDuration) {
+                    animationState = 'expansion';
+                    stateStartTime = timestamp;
+                    
+                    staticParticles = [];
+                    const numRows = Math.floor(h / fontSize);
+                    const numCols = Math.floor(w / fontSize);
+                    
+                    let totalX = 0;
+                    let totalY = 0;
+                    let nameCharCount = 0;
+
+                    for (let r = 0; r < numRows; r++) {
+                        for (let c = 0; c < numCols; c++) {
+                            const nameChar = nameCharacters[`${c},${r}`];
+                            const char = nameChar || matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+                            const particle = { x: c * fontSize, y: r * fontSize, char: char, origX: c * fontSize, origY: r * fontSize, isNameChar: !!nameChar };
+                            staticParticles.push(particle);
+
+                            if (particle.isNameChar) {
+                                totalX += particle.origX;
+                                totalY += particle.origY;
+                                nameCharCount++;
+                            }
+                        }
+                    }
+                    nameCenterX = totalX / nameCharCount;
+                    nameCenterY = totalY / nameCharCount;
+                }
+            } else if (animationState === 'expansion') {
+                const progress = Math.min(elapsedTime / expansionDuration, 1);
+                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+                ctx.fillRect(0, 0, w, h);
+
+                const centerX = w / 2;
+                const centerY = h / 2;
+                const expansionFactor = 2;
+
+                const maxDistance = Math.hypot(w, h);
+                const rippleWidth = 100;
+
+                staticParticles.forEach(p => {
+                    let font = `${fontSize}px monospace`;
+                    let color;
+                    let currentX, currentY;
+
+                    if (p.isNameChar) {
+                        if (elapsedTime > nameExpansionStartTime) {
+                            const nameExpandProgress = Math.min((elapsedTime - nameExpansionStartTime) / nameExpansionDuration, 1);
+                            const sizeMultiplier = 1 + nameExpandProgress * 4;  
+                            font = `bold ${fontSize * sizeMultiplier}px monospace`;
+                            
+                            const distanceToCenterX = p.origX - nameCenterX;
+                            const distanceToCenterY = p.origY - nameCenterY;
+                            currentX = nameCenterX + distanceToCenterX * sizeMultiplier;
+                            currentY = nameCenterY + distanceToCenterY * sizeMultiplier;
+
+                            const r = 255;
+                            const g = 255 - Math.floor(nameExpandProgress * 100);
+                            const b = 255 - Math.floor(nameExpandProgress * 255);
+                            color = `rgb(${r}, ${g}, ${b})`;
+                        } else {
+                            currentX = p.origX;
+                            currentY = p.origY;
+                            color = '#FFFFFF';
+                        }
+                    } else {
+                        const dx = p.origX - centerX;
+                        const dy = p.origY - centerY;
+                        currentX = p.origX + dx * progress * expansionFactor;
+                        currentY = p.origY + dy * progress * expansionFactor;
+
+                        const distance = Math.hypot(p.origX - nameCenterX, p.origY - nameCenterY);
+                        const rippleOffset = progress * maxDistance;
+                        const shadeFactor = Math.max(0, 1 - Math.abs(distance - rippleOffset) / rippleWidth);
+                        const blueShade = Math.floor(15 + shadeFactor * 105);
+                        color = `rgb(0, 0, ${blueShade})`;
+                    }
+                    
+                    p.finalColor = color;
+                    p.finalFont = font;
+                    p.finalX = currentX;
+                    p.finalY = currentY;
+                    ctx.fillStyle = color;
+                    ctx.font = font;
+                    ctx.fillText(p.char, currentX, currentY);
+                });
+
+                if (progress >= 1) {
+                    animationState = 'reversal';
+                    stateStartTime = timestamp;
+                }
+            } else if (animationState === 'reversal') {
+                const progress = Math.min(elapsedTime / rippleBackDuration, 1);
+                ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+                ctx.fillRect(0, 0, w, h);
+                
+                const centerX = w / 2;
+                const centerY = h / 2;
+                const maxDistance = Math.hypot(w, h);
+                const rippleWidth = 100;
+
+                staticParticles.forEach(p => {
+                    let color = p.finalColor;
+                    if (!p.isNameChar) {
+                        const distance = Math.hypot(p.finalX - centerX, p.finalY - centerY);
+                        const rippleOffset = (1 - progress) * maxDistance;
+                        const shadeFactor = Math.max(0, 1 - Math.abs(distance - rippleOffset) / rippleWidth);
+                        const blueShade = Math.floor(15 + shadeFactor * 105);
+                        color = `rgb(0, 0, ${blueShade})`;
+                    }
+
+                    ctx.fillStyle = color;
+                    ctx.font = p.finalFont;
+                    ctx.fillText(p.char, p.finalX, p.finalY);
+                });
+
+                if (progress >= 1) {
+                    animationState = 'final';
+                    stateStartTime = timestamp;
+                }
+            } else if (animationState === 'final') {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, w, h);
+                
+                staticParticles.forEach(p => {
+                    ctx.fillStyle = p.finalColor;
+                    ctx.font = p.finalFont;
+                    ctx.fillText(p.char, p.finalX, p.finalY);
+                });
+
+                if (elapsedTime > finalPauseDuration) {
+                    animationState = 'rain';
+                    stateStartTime = null;
+                    setupCanvas();
+                }
+            }
+            requestAnimationFrame(draw);
+        }
+
+        requestAnimationFrame(draw);
+    </script>
 </body>
 </html>
